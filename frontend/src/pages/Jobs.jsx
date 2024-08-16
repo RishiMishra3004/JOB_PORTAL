@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { clearAllJobErrors, fetchJobs } from "../store/slices/jobSlice";
+import { clearAllJobErrors, fetchJobs, resetJobSlice } from "../store/slices/jobSlice";
 import Spinner from "../components/Spinner";
 import { FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -38,10 +38,20 @@ const Jobs = () => {
     dispatch(fetchJobs(city, niche, searchKeyword));
   };
 
+  const handleReset = () => {
+    setCity("");
+    setNiche("");
+    setSelectedCity(""); 
+    setSelectedNiche("");
+    setSearchKeyword("");
+    dispatch(resetJobSlice());
+    dispatch(fetchJobs());
+  };
+
   const cities = [
     "Mumbai",
-    "Delhi NCR (New Delhi, Gurgaon, Noida)",
-    "Bangalore (Bengaluru)",
+    "Delhi",
+    "Bangalore",
     "Hyderabad",
     "Chennai",
     "Pune",
@@ -101,6 +111,7 @@ const Jobs = () => {
           </div>
           <div className="wrapper">
             <div className="filter-bar">
+            <button onClick={handleReset} className="btn-wrapper btn">Reset Filters</button>
               <div className="cities">
                 <h2>Filter Job By City</h2>
                 {cities.map((city, index) => (

@@ -6,13 +6,13 @@ const Spinner = () => {
     <>
       <section
         style={{
-          minHeight: "525px",
+          minHeight: "500px",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
         }}
       >
-        <ClipLoader size={150} />
+        <ClipLoader size={150} aria-label="Loading Spinner" />
       </section>
     </>
   );

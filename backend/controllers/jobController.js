@@ -73,23 +73,28 @@ export const postJob = catchAsyncErrors(async (req, res, next) => {
 
 export const getAllJobs = catchAsyncErrors(async (req, res, next) => {
   const { city, niche, searchKeyword } = req.query;
-  const query = {};
+  let query = { $and: [] };
 
   if (city) {
-    query.$or = [{ location: { $regex: city, $options: "i" } }];
+    query.$and.push({ location: { $regex: city, $options: "i" } });
   }
-
   if (niche) {
-    query.$or = [{ jobNiche: { $regex: niche, $options: "i" } }];
+    query.$and.push({ jobNiche: { $regex: niche, $options: "i" } });
+  }
+  if (searchKeyword) {
+    query.$and.push({
+      $or: [
+        { title: { $regex: searchKeyword, $options: "i" } },
+        { companyName: { $regex: searchKeyword, $options: "i" } },
+        { introduction: { $regex: searchKeyword, $options: "i" } },
+      ],
+    });
   }
 
-  if (searchKeyword) {
-    query.$or = [
-      { title: { $regex: searchKeyword, $options: "i" } },
-      { companyName: { $regex: searchKeyword, $options: "i" } },
-      { introduction: { $regex: searchKeyword, $options: "i" } },
-    ];
+  if (query.$and.length === 0) {
+    query = {};
   }
+
   const jobs = await Job.find(query);
   res.status(200).json({
     success: true,

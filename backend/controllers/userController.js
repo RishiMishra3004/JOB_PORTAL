@@ -178,9 +178,8 @@ export const updateProfile = catchAsyncErrors(async (req, res, next) => {
 
 export const updatePassword = catchAsyncErrors(async(req, res, next) => {
   const user = await User.findById(req.user.id).select("+password");
-
   const isPasswordMatched = await user.comparePassword(req.body.oldPassword);
-
+  
   if(!isPasswordMatched){
     return next(new ErrorHandler("Old password is incorrect", 400));
   }
