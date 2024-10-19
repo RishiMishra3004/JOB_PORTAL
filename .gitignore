@@ -26,4 +26,3 @@ dist-ssr
 /
 backend/config
 config.env
-frontend/src/assets/video
